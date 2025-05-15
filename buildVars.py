@@ -23,7 +23,19 @@ addon_info = {
 	"addon_summary": _("invisinote"),
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on add-on information from add-on store
-	"addon_description": _("""Browse virtual notes from a folder"""),
+	"addon_description": _("""Browse notes virtually from a folder.
+
+- NVDA+ALT+O: open folder
+- NVDA+ALT+R: reload notes
+- NVDA+ALT+E: read current note
+- NVDA+ALT+L: next note
+- NVDA+ALT+J: previous note
+- NVDA+ALT+I: previous line
+- NVDA+ALT+K: next line
+- NVDA+ALT+U: read current line
+- NVDA+ALT+A: copy note
+- NVDA+ALT+C: copy line
+"""),
 	# version
 	"addon_version": "1.0",
 	# Author(s)
@@ -35,17 +47,17 @@ addon_info = {
 	# Documentation file name
 	"addon_docFileName": "readme.html",
 	# Minimum NVDA version supported (e.g. "2019.3.0", minor version is optional)
-	"addon_minimumNVDAVersion": None,
+	"addon_minimumNVDAVersion": "2019.3.0",
 	# Last NVDA version supported/tested (e.g. "2024.4.0", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion": "2024.4.0",
+	"addon_lastTestedNVDAVersion": "2024.4.2",
 	# Add-on update channel (default is None, denoting stable releases,
 	# and for development releases, use "dev".)
 	# Do not change unless you know what you are doing!
 	"addon_updateChannel": None,
 	# Add-on license such as GPL 2
-	"addon_license": None,
+	"addon_license": "GPL 2",
 	# URL for the license document the ad-on is licensed under
-	"addon_licenseURL": None,
+	"addon_licenseURL": "https://www.gnu.org/licenses/gpl-2.0.html",
 }
 
 # Define the python files that are the sources of your add-on.
