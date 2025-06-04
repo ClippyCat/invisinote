@@ -16,9 +16,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def __init__(self):
 		super().__init__()
 		addonDir = os.path.dirname(__file__)
-		rootDir = os.path.abspath(os.path.join(addonDir, "..\.."))
+		rootDir = os.path.abspath(os.path.join(addonDir, ".."))
 		
-		self.notesFolder = os.path.join(rootDir, "invisinote")
+		self.notesFolder = os.path.join(rootDir, "notes")
 		
 		if not os.path.exists(self.notesFolder):
 			os.makedirs(self.notesFolder)
