@@ -2,9 +2,11 @@ import addonHandler
 import os
 import ui
 import api
+import subprocess
+import wx
+import gui
 import globalPluginHandler
 from scriptHandler import script
-import subprocess
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	scriptCategory = _("invisinote")
@@ -120,16 +122,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	@script(description=_("Read current line"))
 	def script_read_current_line(self, gesture):
 		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
-			line = self.currentNoteLines[self.currentLineIndex].strip()
-			ui.message(line)
+			ui.message(self.currentNoteLines[self.currentLineIndex].strip())
 		else:
 			ui.message(_("No line to read"))
 
 	@script(description=_("Copy current line"))
 	def script_copy_line(self, gesture):
 		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
-			line = self.currentNoteLines[self.currentLineIndex].strip()
-			api.copyToClip(line)
+			api.copyToClip(self.currentNoteLines[self.currentLineIndex].strip())
 			ui.message(_("Line copied"))
 		else:
 			ui.message(_("No line to copy"))
