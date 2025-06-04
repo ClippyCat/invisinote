@@ -28,16 +28,18 @@ addon_info = {
 - NVDA+ALT+O: open folder
 - NVDA+ALT+R: reload notes
 - NVDA+ALT+E: read current note
-- NVDA+ALT+L: next note
-- NVDA+ALT+J: previous note
+- NVDA+ALT+,: previous note
+- NVDA+ALT+.: next note
 - NVDA+ALT+I: previous line
 - NVDA+ALT+K: next line
+- NVDA+ALT+J: previous word
+- NVDA+ALT+L: next word
 - NVDA+ALT+U: read current line
 - NVDA+ALT+A: copy note
 - NVDA+ALT+C: copy line
 """),
 	# version
-	"addon_version": "1.0",
+	"addon_version": "1.1",
 	# Author(s)
 	"addon_author": "ClippyCat",
 	# URL for the add-on documentation support
