@@ -3,8 +3,6 @@ import os
 import ui
 import api
 import subprocess
-import wx
-import gui
 import globalPluginHandler
 from scriptHandler import script
 
@@ -14,6 +12,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	currentNoteIndex = 0
 	currentLineIndex = 0
 	currentNoteLines = []
+	currentWordIndex = 0
 
 	def __init__(self):
 		super().__init__()
@@ -33,7 +32,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			if f.endswith(".txt")
 		]
 		if self.notes:
-			self.currentNoteIndex = 0  # Reset to the first note
+			self.currentNoteIndex = 0
 			self._loadCurrentNoteLines()
 			ui.message(_("Loaded {} notes.").format(len(self.notes)))
 		else:
@@ -44,9 +43,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			notePath = self.notes[self.currentNoteIndex]
 			with open(notePath, "r", encoding="utf-8") as note:
 				self.currentNoteLines = note.readlines()
-			self.currentLineIndex = 0  # Reset to the first line
+			self.set_current_line(0)
 		else:
 			self.currentNoteLines = []
+
+	def set_current_line(self, index):
+		self.currentLineIndex = index
+		self.currentWordIndex = 0
 
 	@script(description=_("Open the folder"))
 	def script_open_folder(self, gesture):
@@ -110,13 +113,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	@script(description=_("Move to next line"))
 	def script_next_line(self, gesture):
 		if self.currentNoteLines and self.currentLineIndex < len(self.currentNoteLines) - 1:
-			self.currentLineIndex += 1
+			self.set_current_line(self.currentLineIndex + 1)
 		ui.message(self.currentNoteLines[self.currentLineIndex].strip())
 
 	@script(description=_("Move to previous line"))
 	def script_previous_line(self, gesture):
 		if self.currentNoteLines and self.currentLineIndex > 0:
-			self.currentLineIndex -= 1
+			self.set_current_line(self.currentLineIndex - 1)
 		ui.message(self.currentNoteLines[self.currentLineIndex].strip())
 
 	@script(description=_("Read current line"))
@@ -134,6 +137,30 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		else:
 			ui.message(_("No line to copy"))
 
+	@script(description=_("Move to next word"))
+	def script_next_word(self, gesture):
+		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
+			words = self.currentNoteLines[self.currentLineIndex].strip().split()
+			if words and self.currentWordIndex < len(words) - 1:
+				self.currentWordIndex += 1
+				ui.message(words[self.currentWordIndex])
+			else:
+				ui.message(_("No next word"))
+		else:
+			ui.message(_("No line loaded"))
+
+	@script(description=_("Move to previous word"))
+	def script_previous_word(self, gesture):
+		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
+			words = self.currentNoteLines[self.currentLineIndex].strip().split()
+			if words and self.currentWordIndex > 0:
+				self.currentWordIndex -= 1
+				ui.message(words[self.currentWordIndex])
+			else:
+				ui.message(_("No previous word"))
+		else:
+			ui.message(_("No line loaded"))
+
 	__gestures = {
 		"kb:NVDA+ALT+O": "open_folder",
 		"kb:NVDA+ALT+R": "load_notes",
@@ -142,6 +169,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+J": "previous_note",
 		"kb:NVDA+ALT+I": "previous_line",
 		"kb:NVDA+ALT+K": "next_line",
+		"kb:NVDA+ALT+,": "previous_word",
+		"kb:NVDA+ALT+.": "next_word",
 		"kb:NVDA+ALT+U": "read_current_line",
 		"kb:NVDA+ALT+A": "copy_note",
 		"kb:NVDA+ALT+C": "copy_line",
