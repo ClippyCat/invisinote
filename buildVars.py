@@ -25,16 +25,15 @@ addon_info = {
 	# Translators: Long description to be shown for this add-on on add-on information from add-on store
 	"addon_description": _("""Browse notes virtually from a folder.
 
-- NVDA+ALT+O: open folder
+- NVDA+ALT+P: open path
 - NVDA+ALT+R: reload notes
 - NVDA+ALT+E: read current note
-- NVDA+ALT+,: previous note
-- NVDA+ALT+.: next note
+- NVDA+ALT+U: previous note
+- NVDA+ALT+O: next note
 - NVDA+ALT+I: previous line
 - NVDA+ALT+K: next line
 - NVDA+ALT+J: previous word
 - NVDA+ALT+L: next word
-- NVDA+ALT+U: read current line
 - NVDA+ALT+A: copy note
 - NVDA+ALT+C: copy line
 """),

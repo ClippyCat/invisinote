@@ -19,16 +19,16 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		addonDir = os.path.dirname(__file__)
 		rootDir = os.path.abspath(os.path.join(addonDir, ".."))
 		
-		self.notesFolder = os.path.join(rootDir, "notes")
+		self.notesPath = os.path.join(rootDir, "notes")
 		
-		if not os.path.exists(self.notesFolder):
-			os.makedirs(self.notesFolder)
-			ui.message(_("Folder created"))
+		if not os.path.exists(self.notesPath):
+			os.makedirs(self.notesPath)
+			ui.message(_("Path created"))
 
 	def _loadNotes(self):
 		self.notes = [
-			os.path.join(self.notesFolder, f)
-			for f in os.listdir(self.notesFolder)
+			os.path.join(self.notesPath, f)
+			for f in os.listdir(self.notesPath)
 			if f.endswith(".txt")
 		]
 		if self.notes:
@@ -51,13 +51,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentLineIndex = index
 		self.currentWordIndex = 0
 
-	@script(description=_("Open the folder"))
-	def script_open_folder(self, gesture):
-		if os.path.exists(self.notesFolder):
-			subprocess.Popen(f'explorer "{self.notesFolder}"', shell=True)
-			ui.message(_("Opened folder"))
+	@script(description=_("Open the path"))
+	def script_open_path(self, gesture):
+		if os.path.exists(self.notesPath):
+			subprocess.Popen(f'explorer "{self.notesPath}"', shell=True)
+			ui.message(_("Opened path"))
 		else:
-			ui.message(_("Folder not found"))
+			ui.message(_("Path not found"))
 
 	@script(description=_("Read current note"))
 	def script_read_current_note(self, gesture):
@@ -122,13 +122,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.set_current_line(self.currentLineIndex - 1)
 		ui.message(self.currentNoteLines[self.currentLineIndex].strip())
 
-	@script(description=_("Read current line"))
-	def script_read_current_line(self, gesture):
-		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
-			ui.message(self.currentNoteLines[self.currentLineIndex].strip())
-		else:
-			ui.message(_("No line to read"))
-
 	@script(description=_("Copy current line"))
 	def script_copy_line(self, gesture):
 		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
@@ -143,11 +136,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			words = self.currentNoteLines[self.currentLineIndex].strip().split()
 			if words and self.currentWordIndex < len(words) - 1:
 				self.currentWordIndex += 1
-				ui.message(words[self.currentWordIndex])
-			else:
-				ui.message(_("No next word"))
-		else:
-			ui.message(_("No line loaded"))
+			ui.message(words[self.currentWordIndex])
 
 	@script(description=_("Move to previous word"))
 	def script_previous_word(self, gesture):
@@ -155,23 +144,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			words = self.currentNoteLines[self.currentLineIndex].strip().split()
 			if words and self.currentWordIndex > 0:
 				self.currentWordIndex -= 1
-				ui.message(words[self.currentWordIndex])
-			else:
-				ui.message(_("No previous word"))
-		else:
-			ui.message(_("No line loaded"))
+			ui.message(words[self.currentWordIndex])
 
 	__gestures = {
-		"kb:NVDA+ALT+O": "open_folder",
+		"kb:NVDA+ALT+P": "open_path",
 		"kb:NVDA+ALT+R": "load_notes",
 		"kb:NVDA+ALT+E": "read_current_note",
-		"kb:NVDA+ALT+,": "previous_note",
-		"kb:NVDA+ALT+.": "next_note",
+		"kb:NVDA+ALT+U": "previous_note",
+		"kb:NVDA+ALT+O": "next_note",
 		"kb:NVDA+ALT+I": "previous_line",
 		"kb:NVDA+ALT+K": "next_line",
 		"kb:NVDA+ALT+J": "previous_word",
 		"kb:NVDA+ALT+L": "next_word",
-		"kb:NVDA+ALT+U": "read_current_line",
 		"kb:NVDA+ALT+A": "copy_note",
 		"kb:NVDA+ALT+C": "copy_line",
 	}
