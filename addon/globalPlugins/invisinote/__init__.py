@@ -60,7 +60,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			ui.message(_("Path not found"))
 
 	@script(description=_("Read current note"))
-	def script_read_current_note(self, gesture):
+	def script_read_note(self, gesture):
 		if self.notes:
 			notePath = self.notes[self.currentNoteIndex]
 			with open(notePath, "r", encoding="utf-8") as note:
@@ -148,14 +148,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	__gestures = {
 		"kb:NVDA+ALT+P": "open_path",
-		"kb:NVDA+ALT+R": "load_notes",
-		"kb:NVDA+ALT+E": "read_current_note",
+		"kb:NVDA+ALT+N": "load_notes",
 		"kb:NVDA+ALT+U": "previous_note",
 		"kb:NVDA+ALT+O": "next_note",
 		"kb:NVDA+ALT+I": "previous_line",
 		"kb:NVDA+ALT+K": "next_line",
 		"kb:NVDA+ALT+J": "previous_word",
 		"kb:NVDA+ALT+L": "next_word",
+		"kb:NVDA+ALT+SHIFT+A": "read_note",
 		"kb:NVDA+ALT+A": "copy_note",
 		"kb:NVDA+ALT+C": "copy_line",
 	}

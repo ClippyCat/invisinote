@@ -26,19 +26,20 @@ addon_info = {
 	"addon_description": _("""Browse notes virtually from a folder.
 
 - NVDA+ALT+P: open path
-- NVDA+ALT+R: reload notes
-- NVDA+ALT+E: read current note
+- NVDA+ALT+N: load notes
 - NVDA+ALT+U: previous note
 - NVDA+ALT+O: next note
 - NVDA+ALT+I: previous line
 - NVDA+ALT+K: next line
 - NVDA+ALT+J: previous word
 - NVDA+ALT+L: next word
+- NVDA+ALT+SHIFT+A: read note
 - NVDA+ALT+A: copy note
 - NVDA+ALT+C: copy line
+
 """),
 	# version
-	"addon_version": "1.1",
+	"addon_version": "1.2",
 	# Author(s)
 	"addon_author": "ClippyCat",
 	# URL for the add-on documentation support
