@@ -35,7 +35,7 @@ addon_info = {
 - NVDA+ALT+L: next word
 - NVDA+ALT+SHIFT+A: read note
 - NVDA+ALT+A: copy note
-- NVDA+ALT+C: copy line
+- NVDA+ALT+;: copy line
 
 """),
 	# version

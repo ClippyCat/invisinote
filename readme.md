@@ -24,7 +24,5 @@ Virtually browse notes from a predefined folder with the following gestures:
 
 \- NVDA+ALT+A: copy note
 
-\- NVDA+ALT+C: copy line
-
-
+\- NVDA+ALT+;: copy line
 

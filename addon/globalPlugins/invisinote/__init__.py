@@ -157,5 +157,5 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+L": "next_word",
 		"kb:NVDA+ALT+SHIFT+A": "read_note",
 		"kb:NVDA+ALT+A": "copy_note",
-		"kb:NVDA+ALT+C": "copy_line",
+		"kb:NVDA+ALT+;": "copy_line",
 	}
