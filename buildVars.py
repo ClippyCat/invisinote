@@ -33,10 +33,11 @@ addon_info = {
 - NVDA+ALT+K: next line
 - NVDA+ALT+J: previous word
 - NVDA+ALT+L: next word
+- NVDA+ALT+,: previous character
+- NVDA+ALT+.: next character
 - NVDA+ALT+SHIFT+A: read note
 - NVDA+ALT+A: copy note
 - NVDA+ALT+;: copy line
-
 """),
 	# version
 	"addon_version": "1.2",

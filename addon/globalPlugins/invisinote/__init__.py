@@ -13,6 +13,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	currentLineIndex = 0
 	currentNoteLines = []
 	currentWordIndex = 0
+	currentCharIndex = 0
 
 	def __init__(self):
 		super().__init__()
@@ -49,7 +50,38 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def set_current_line(self, index):
 		self.currentLineIndex = index
+		self.currentCharIndex = 0
 		self.currentWordIndex = 0
+
+	def _current_line(self):
+		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
+			return self.currentNoteLines[self.currentLineIndex].rstrip("\n")
+		return ""
+
+	def _words_with_indices(self, line):
+		import re
+		words = []
+		for match in re.finditer(r'\S+', line):
+			words.append((match.group(0), match.start(), match.end()))
+		return words
+
+	def _update_word_index_from_char(self):
+		line = self._current_line()
+		words = self._words_with_indices(line)
+		idx = self.currentCharIndex
+		for i, (_, start, end) in enumerate(words):
+			if start <= idx < end:
+				self.currentWordIndex = i
+				return
+		self.currentWordIndex = len(words) - 1 if words else 0
+
+	def _update_char_index_from_word(self):
+		line = self._current_line()
+		words = self._words_with_indices(line)
+		if 0 <= self.currentWordIndex < len(words):
+			self.currentCharIndex = words[self.currentWordIndex][1]
+		else:
+			self.currentCharIndex = 0
 
 	@script(description=_("Open the path"))
 	def script_open_path(self, gesture):
@@ -114,37 +146,58 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def script_next_line(self, gesture):
 		if self.currentNoteLines and self.currentLineIndex < len(self.currentNoteLines) - 1:
 			self.set_current_line(self.currentLineIndex + 1)
-		ui.message(self.currentNoteLines[self.currentLineIndex].strip())
+		ui.message(self._current_line())
 
 	@script(description=_("Move to previous line"))
 	def script_previous_line(self, gesture):
 		if self.currentNoteLines and self.currentLineIndex > 0:
 			self.set_current_line(self.currentLineIndex - 1)
-		ui.message(self.currentNoteLines[self.currentLineIndex].strip())
+		ui.message(self._current_line())
 
 	@script(description=_("Copy current line"))
 	def script_copy_line(self, gesture):
-		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
-			api.copyToClip(self.currentNoteLines[self.currentLineIndex].strip())
+		line = self._current_line()
+		if line:
+			api.copyToClip(line)
 			ui.message(_("Line copied"))
 		else:
 			ui.message(_("No line to copy"))
 
+	@script(description=_("Move to next character"))
+	def script_next_character(self, gesture):
+		line = self._current_line()
+		if self.currentCharIndex < len(line) - 1:
+			self.currentCharIndex += 1
+		if line:
+			ui.message(line[self.currentCharIndex])
+
+	@script(description=_("Move to previous character"))
+	def script_previous_character(self, gesture):
+		line = self._current_line()
+		if self.currentCharIndex > 0:
+			self.currentCharIndex -= 1
+		if line:
+			ui.message(line[self.currentCharIndex])
+
 	@script(description=_("Move to next word"))
 	def script_next_word(self, gesture):
-		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
-			words = self.currentNoteLines[self.currentLineIndex].strip().split()
-			if words and self.currentWordIndex < len(words) - 1:
-				self.currentWordIndex += 1
-			ui.message(words[self.currentWordIndex])
+		line = self._current_line()
+		words = self._words_with_indices(line)
+		if words and self.currentWordIndex < len(words) - 1:
+			self.currentWordIndex += 1
+			self._update_char_index_from_word()
+		if words:
+			ui.message(words[self.currentWordIndex][0])
 
 	@script(description=_("Move to previous word"))
 	def script_previous_word(self, gesture):
-		if self.currentNoteLines and 0 <= self.currentLineIndex < len(self.currentNoteLines):
-			words = self.currentNoteLines[self.currentLineIndex].strip().split()
-			if words and self.currentWordIndex > 0:
-				self.currentWordIndex -= 1
-			ui.message(words[self.currentWordIndex])
+		line = self._current_line()
+		words = self._words_with_indices(line)
+		if words and self.currentWordIndex > 0:
+			self.currentWordIndex -= 1
+			self._update_char_index_from_word()
+		if words:
+			ui.message(words[self.currentWordIndex][0])
 
 	__gestures = {
 		"kb:NVDA+ALT+P": "open_path",
@@ -155,6 +208,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+K": "next_line",
 		"kb:NVDA+ALT+J": "previous_word",
 		"kb:NVDA+ALT+L": "next_word",
+		"kb:NVDA+ALT+,": "previous_character",
+		"kb:NVDA+ALT+.": "next_character",
 		"kb:NVDA+ALT+SHIFT+A": "read_note",
 		"kb:NVDA+ALT+A": "copy_note",
 		"kb:NVDA+ALT+;": "copy_line",

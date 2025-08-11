@@ -20,6 +20,10 @@ Virtually browse notes from a predefined folder with the following gestures:
 
 \- NVDA+ALT+L: next word
 
+\- NVDA+ALT+,: previous character
+
+\- NVDA+ALT+.: next character
+
 \- NVDA+ALT+SHIFT+A: read note
 
 \- NVDA+ALT+A: copy note
