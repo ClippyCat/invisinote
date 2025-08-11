@@ -30,3 +30,7 @@ Virtually browse notes from a predefined folder with the following gestures:
 
 \- NVDA+ALT+;: copy line
 
+
+
+\[Update](https://github.com/nvaccess/addon-datastore/issues/new?template=registerAddon.yml)
+
