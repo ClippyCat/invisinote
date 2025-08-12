@@ -4,7 +4,9 @@ My first dip into the NVDA addon rabbit hole.
 Virtually browse notes from a predefined folder with the following gestures:
 
 - NVDA+ALT+P: open path
-- NVDA+ALT+N: load notes
+- NVDA+SHIFT+ALT+P: edit paths
+- NVDA+ALT+[: previous folder
+- NVDA+ALT+[: next folder
 - NVDA+ALT+U: previous note
 - NVDA+ALT+O: next note
 - NVDA+ALT+I: previous line
