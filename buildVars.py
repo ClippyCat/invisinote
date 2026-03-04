@@ -51,7 +51,7 @@ addon_info = {
 - NVDA+ALT+BACKSPACE: clear selection
 """),
 	# version
-	"addon_version": "1.3",
+	"addon_version": "1.4",
 	# Author(s)
 	"addon_author": "ClippyCat",
 	# URL for the add-on documentation support
