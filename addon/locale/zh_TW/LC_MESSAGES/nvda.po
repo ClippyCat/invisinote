@@ -1,0 +1,234 @@
+# Traditional Chinese translation for invisinote
+# Copyright (C) 2026 ClippyCat
+# This file is distributed under the same license as the invisinote package.
+msgid ""
+msgstr ""
+"Project-Id-Version: invisinote 1.4\n"
+"Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
+"POT-Creation-Date: 2026-03-03 00:00+0000\n"
+"PO-Revision-Date: 2026-03-03 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Traditional Chinese\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. addon summary
+msgid "invisinote"
+msgstr "invisinote"
+
+#. addon description
+msgid ""
+"Browse notes virtually from configured folders.\n"
+"\n"
+"- NVDA+ALT+P: open path\n"
+"- NVDA+ALT+SHIFT+P: open settings (configure folders and file types)\n"
+"- NVDA+ALT+[: previous folder\n"
+"- NVDA+ALT+]: next folder\n"
+"- NVDA+ALT+N: load notes\n"
+"- NVDA+ALT+U: previous note\n"
+"- NVDA+ALT+O: next note\n"
+"- NVDA+ALT+I: previous line\n"
+"- NVDA+ALT+K: next line\n"
+"- NVDA+ALT+J: previous word\n"
+"- NVDA+ALT+L: next word\n"
+"- NVDA+ALT+,: previous character\n"
+"- NVDA+ALT+.: next character\n"
+"- NVDA+ALT+SHIFT+A: read note\n"
+"- NVDA+ALT+A: copy note\n"
+"- NVDA+ALT+;: copy line\n"
+"- NVDA+ALT+SHIFT+I: select to previous line\n"
+"- NVDA+ALT+SHIFT+K: select to next line\n"
+"- NVDA+ALT+SHIFT+J: select to previous word\n"
+"- NVDA+ALT+SHIFT+L: select to next word\n"
+"- NVDA+ALT+SHIFT+,: select to previous character\n"
+"- NVDA+ALT+SHIFT+.: select to next character\n"
+"- NVDA+ALT+SHIFT+;: copy selection\n"
+"- NVDA+ALT+BACKSPACE: clear selection\n"
+msgstr ""
+"從設定的資料夾中虛擬瀏覽檔案。\n"
+"\n"
+"- NVDA+ALT+P：開啟路徑\n"
+"- NVDA+ALT+SHIFT+P：開啟設定（設定資料夾與檔案類型）\n"
+"- NVDA+ALT+[：上一個資料夾\n"
+"- NVDA+ALT+]：下一個資料夾\n"
+"- NVDA+ALT+N：載入檔案\n"
+"- NVDA+ALT+U：上一個檔案\n"
+"- NVDA+ALT+O：下一個檔案\n"
+"- NVDA+ALT+I：上一行\n"
+"- NVDA+ALT+K：下一行\n"
+"- NVDA+ALT+J：上一個單字\n"
+"- NVDA+ALT+L：下一個單字\n"
+"- NVDA+ALT+,：上一個字元\n"
+"- NVDA+ALT+.：下一個字元\n"
+"- NVDA+ALT+SHIFT+A：朗讀檔案\n"
+"- NVDA+ALT+A：複製檔案\n"
+"- NVDA+ALT+;：複製行\n"
+"- NVDA+ALT+SHIFT+I：選取至上一行\n"
+"- NVDA+ALT+SHIFT+K：選取至下一行\n"
+"- NVDA+ALT+SHIFT+J：選取至上一個單字\n"
+"- NVDA+ALT+SHIFT+L：選取至下一個單字\n"
+"- NVDA+ALT+SHIFT+,：選取至上一個字元\n"
+"- NVDA+ALT+SHIFT+.：選取至下一個字元\n"
+"- NVDA+ALT+SHIFT+;：複製選取內容\n"
+"- NVDA+ALT+BACKSPACE：清除選取\n"
+
+msgid "Invisinote settings"
+msgstr "Invisinote 設定"
+
+msgid "Folders"
+msgstr "資料夾"
+
+msgid "Add folder"
+msgstr "新增資料夾"
+
+msgid "Remove folder"
+msgstr "移除資料夾"
+
+msgid "File types"
+msgstr "檔案類型"
+
+msgid "Add type"
+msgstr "新增類型"
+
+msgid "Remove type"
+msgstr "移除類型"
+
+msgid "Choose a folder"
+msgstr "選擇資料夾"
+
+msgid "Enter file extension (e.g. md):"
+msgstr "輸入副檔名（例如 md）："
+
+msgid "Add file type"
+msgstr "新增檔案類型"
+
+msgid "invisinote"
+msgstr "invisinote"
+
+msgid "Folder not found"
+msgstr "找不到資料夾"
+
+msgid "{} notes."
+msgstr "{} 個檔案。"
+
+msgid "No notes"
+msgstr "沒有檔案"
+
+msgid "Empty note"
+msgstr "空白檔案"
+
+msgid "Note copied"
+msgstr "已複製檔案"
+
+msgid "Line copied"
+msgstr "已複製行"
+
+msgid "No line to copy"
+msgstr "沒有可複製的行"
+
+msgid "selected"
+msgstr "已選取"
+
+msgid "unselected"
+msgstr "已取消選取"
+
+msgid "blank"
+msgstr "空白"
+
+msgid "Selection copied"
+msgstr "已複製選取內容"
+
+msgid "No selection"
+msgstr "沒有選取內容"
+
+msgid "Selection cleared"
+msgstr "已清除選取"
+
+msgid "Opened path"
+msgstr "已開啟路徑"
+
+msgid "No previous folder"
+msgstr "沒有上一個資料夾"
+
+msgid "No next folder"
+msgstr "沒有下一個資料夾"
+
+msgid "No next note"
+msgstr "沒有下一個檔案"
+
+msgid "No previous note"
+msgstr "沒有上一個檔案"
+
+msgid "Open the path"
+msgstr "開啟路徑"
+
+msgid "Edit paths"
+msgstr "編輯路徑"
+
+msgid "Move to previous folder"
+msgstr "移至上一個資料夾"
+
+msgid "Move to next folder"
+msgstr "移至下一個資料夾"
+
+msgid "Read current note"
+msgstr "朗讀目前檔案"
+
+msgid "Copy note"
+msgstr "複製檔案"
+
+msgid "Load all notes"
+msgstr "載入所有檔案"
+
+msgid "Move to next note"
+msgstr "移至下一個檔案"
+
+msgid "Move to previous note"
+msgstr "移至上一個檔案"
+
+msgid "Move to next line"
+msgstr "移至下一行"
+
+msgid "Move to previous line"
+msgstr "移至上一行"
+
+msgid "Copy current line"
+msgstr "複製目前行"
+
+msgid "Move to next character"
+msgstr "移至下一個字元"
+
+msgid "Move to previous character"
+msgstr "移至上一個字元"
+
+msgid "Move to next word"
+msgstr "移至下一個單字"
+
+msgid "Move to previous word"
+msgstr "移至上一個單字"
+
+msgid "Select to next line"
+msgstr "選取至下一行"
+
+msgid "Select to previous line"
+msgstr "選取至上一行"
+
+msgid "Select to next word"
+msgstr "選取至下一個單字"
+
+msgid "Select to previous word"
+msgstr "選取至上一個單字"
+
+msgid "Select to next character"
+msgstr "選取至下一個字元"
+
+msgid "Select to previous character"
+msgstr "選取至上一個字元"
+
+msgid "Copy selection"
+msgstr "複製選取內容"
+
+msgid "Clear selection"
+msgstr "清除選取"
