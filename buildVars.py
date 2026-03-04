@@ -23,12 +23,13 @@ addon_info = {
 	"addon_summary": _("invisinote"),
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on add-on information from add-on store
-	"addon_description": _("""Browse notes virtually from a folder.
+	"addon_description": _("""Browse notes virtually from configured folders.
 
 - NVDA+ALT+P: open path
-- NVDA+SHIFT+ALT+P: edit paths
+- NVDA+ALT+SHIFT+P: open settings (configure folders and file types)
 - NVDA+ALT+[: previous folder
-- NVDA+ALT+[: next folder
+- NVDA+ALT+]: next folder
+- NVDA+ALT+N: load notes
 - NVDA+ALT+U: previous note
 - NVDA+ALT+O: next note
 - NVDA+ALT+I: previous line
@@ -40,6 +41,14 @@ addon_info = {
 - NVDA+ALT+SHIFT+A: read note
 - NVDA+ALT+A: copy note
 - NVDA+ALT+;: copy line
+- NVDA+ALT+SHIFT+I: select to previous line
+- NVDA+ALT+SHIFT+K: select to next line
+- NVDA+ALT+SHIFT+J: select to previous word
+- NVDA+ALT+SHIFT+L: select to next word
+- NVDA+ALT+SHIFT+,: select to previous character
+- NVDA+ALT+SHIFT+.: select to next character
+- NVDA+ALT+SHIFT+;: copy selection
+- NVDA+ALT+BACKSPACE: clear selection
 """),
 	# version
 	"addon_version": "1.3",
@@ -54,7 +63,7 @@ addon_info = {
 	# Minimum NVDA version supported (e.g. "2019.3.0", minor version is optional)
 	"addon_minimumNVDAVersion": "2019.3.0",
 	# Last NVDA version supported/tested (e.g. "2024.4.0", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion": "2025.1",
+	"addon_lastTestedNVDAVersion": "2025.3",
 	# Add-on update channel (default is None, denoting stable releases,
 	# and for development releases, use "dev".)
 	# Do not change unless you know what you are doing!
