@@ -481,6 +481,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				api.copyToClip(text)
 				ui.message(_("selection copied"))
 
+	@script(description=_("Clear selection markers"))
+	def script_clear_markers(self, gesture):
+		self.selectionStart = None
+		self.selectionEnd = None
+		ui.message(_("selection cleared"))
+
 	@script(description=_("Select to previous line"))
 	def script_select_previous_line(self, gesture):
 		if not self.currentNoteLines:
@@ -617,6 +623,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+;": "copy_line",
 		"kb:NVDA+ALT+F9": "set_selection_start",
 		"kb:NVDA+ALT+F10": "set_selection_end",
+		"kb:NVDA+BACKSPACE": "clear_markers",
 		"kb:NVDA+ALT+SHIFT+I": "select_previous_line",
 		"kb:NVDA+ALT+SHIFT+K": "select_next_line",
 		"kb:NVDA+ALT+SHIFT+J": "select_previous_word",
