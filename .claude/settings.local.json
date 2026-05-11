@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git:*)",
+      "Bash(scons)",
+      "Bash(where msgfmt:*)",
+      "Bash(dir /s /b \"C:\\\\Program Files \\(x86\\)\\\\GnuWin32\\\\bin\\\\msgfmt.exe\")",
+      "Bash(dir /s /b \"C:\\\\Program Files\\\\GnuWin32\\\\bin\\\\msgfmt.exe\")",
+      "Bash(export PATH=\"$PATH:/c/Program Files \\(x86\\)/GnuWin32/bin\")",
+      "Bash(gh release:*)",
+      "Bash(gh issue:*)",
+      "Bash(ruff check *)",
+      "Bash(python -m py_compile addon/globalPlugins/invisinote/__init__.py)",
+      "Bash(scons pot *)",
+      "Bash(xgettext --version)",
+      "PowerShell(xgettext *)"
+    ]
+  }
+}
