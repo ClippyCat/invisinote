@@ -372,6 +372,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			char = line[self.currentCharIndex]
 			ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), char))
 
+	@script(description=_("Move to end of line"))
+	def script_end_of_line(self, gesture):
+		line = self._current_line()
+		self.currentCharIndex = max(0, len(line) - 1)
+		self._update_word_index_from_char()
+		if line:
+			char = line[self.currentCharIndex]
+			ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), char))
+
 	@script(description=_("Move to next word"))
 	def script_next_word(self, gesture):
 		words = self._words_with_indices(self._current_line())
@@ -455,6 +464,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+,": "previous_character",
 		"kb:NVDA+ALT+.": "next_character",
 		"kb:NVDA+ALT+H": "start_of_line",
+		"kb:NVDA+ALT+'": "end_of_line",
 		"kb:NVDA+ALT+SHIFT+A": "read_note",
 		"kb:NVDA+ALT+A": "copy_note",
 		"kb:NVDA+ALT+;": "copy_line",
