@@ -121,7 +121,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentNoteLines = []
 		self.currentWordIndex = 0
 		self.currentCharIndex = 0
-		self.selectionAnchor = None
 		self.selectionStart = None
 		self.selectionEnd = None
 		self.paths = []
@@ -181,13 +180,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentLineIndex = 0
 		self.currentWordIndex = 0
 		self.currentCharIndex = 0
-		self.selectionAnchor = None
 		self.selectionStart = None
 		self.selectionEnd = None
 		return _("No notes")
 
 	def _load_current_note_lines(self):
-		self.selectionAnchor = None
 		self.selectionStart = None
 		self.selectionEnd = None
 		if self.notes:
@@ -322,14 +319,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	@script(description=_("Move to next line"))
 	def script_next_line(self, gesture):
-		self.selectionAnchor = None
 		if self.currentNoteLines and self.currentLineIndex < len(self.currentNoteLines) - 1:
 			self._set_current_line(self.currentLineIndex + 1)
 		ui.message(self._current_line())
 
 	@script(description=_("Move to previous line"))
 	def script_previous_line(self, gesture):
-		self.selectionAnchor = None
 		if self.currentNoteLines and self.currentLineIndex > 0:
 			self._set_current_line(self.currentLineIndex - 1)
 		ui.message(self._current_line())
@@ -345,7 +340,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	@script(description=_("Move to next character"))
 	def script_next_character(self, gesture):
-		self.selectionAnchor = None
 		line = self._current_line()
 		# clamp in case a prior selection script set charIndex past end
 		self.currentCharIndex = min(self.currentCharIndex, max(0, len(line) - 1))
@@ -358,7 +352,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	@script(description=_("Move to previous character"))
 	def script_previous_character(self, gesture):
-		self.selectionAnchor = None
 		line = self._current_line()
 		self.currentCharIndex = min(self.currentCharIndex, max(0, len(line) - 1))
 		if self.currentCharIndex > 0:
@@ -370,7 +363,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	@script(description=_("Move to next word"))
 	def script_next_word(self, gesture):
-		self.selectionAnchor = None
 		words = self._words_with_indices(self._current_line())
 		if not words:
 			return
@@ -382,7 +374,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	@script(description=_("Move to previous word"))
 	def script_previous_word(self, gesture):
-		self.selectionAnchor = None
 		words = self._words_with_indices(self._current_line())
 		if not words:
 			return
