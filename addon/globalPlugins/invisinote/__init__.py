@@ -307,6 +307,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.currentNoteIndex += 1
 			self._load_current_note_lines()
 			ui.message(os.path.basename(self.notes[self.currentNoteIndex]))
+		elif self.notes:
+			ui.message(_("No next note, {}").format(os.path.basename(self.notes[self.currentNoteIndex])))
 		else:
 			ui.message(_("No next note"))
 
@@ -316,6 +318,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.currentNoteIndex -= 1
 			self._load_current_note_lines()
 			ui.message(os.path.basename(self.notes[self.currentNoteIndex]))
+		elif self.notes:
+			ui.message(_("No previous note, {}").format(os.path.basename(self.notes[self.currentNoteIndex])))
 		else:
 			ui.message(_("No previous note"))
 
