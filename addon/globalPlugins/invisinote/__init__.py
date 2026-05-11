@@ -8,6 +8,7 @@ import subprocess
 import globalPluginHandler
 import characterProcessing
 import languageHandler
+import scriptHandler
 from scriptHandler import script
 
 
@@ -121,6 +122,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentWordIndex = 0
 		self.currentCharIndex = 0
 		self.selectionAnchor = None
+		self.selectionStart = None
+		self.selectionEnd = None
 		self.paths = []
 		self.currentPathIndex = 0
 		self.notesPath = ""
@@ -251,6 +254,23 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		old_off = self._abs_offset(old_line, old_char)
 		new_off = self._abs_offset(nL, nC)
 		return abs(new_off - anchor_off) >= abs(old_off - anchor_off)
+
+	def _selection_text(self):
+		if self.selectionStart is None or self.selectionEnd is None:
+			return None
+		if self.selectionStart <= self.selectionEnd:
+			startLine, startChar = self.selectionStart
+			endLine, endChar = self.selectionEnd
+		else:
+			startLine, startChar = self.selectionEnd
+			endLine, endChar = self.selectionStart
+		if startLine == endLine:
+			return self.currentNoteLines[startLine].rstrip("\n")[startChar:endChar + 1]
+		parts = [self.currentNoteLines[startLine][startChar:]]
+		for i in range(startLine + 1, endLine):
+			parts.append(self.currentNoteLines[i])
+		parts.append(self.currentNoteLines[endLine].rstrip("\n")[:endChar + 1])
+		return "".join(parts)
 
 	@script(description=_("Open the path"))
 	def script_open_path(self, gesture):
@@ -427,6 +447,19 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		delta = self._current_line() if extending else self.currentNoteLines[old_line].rstrip("\n")
 		ui.message((delta or _("blank")) + " " + suffix)
 
+	@script(description=_("Set selection start"))
+	def script_set_selection_start(self, gesture):
+		if not self.currentNoteLines:
+			ui.message(_("No notes"))
+			return
+		self.selectionStart = (self.currentLineIndex, self.currentCharIndex)
+		line = self._current_line()
+		if line and self.currentCharIndex < len(line):
+			char = characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), line[self.currentCharIndex])
+		else:
+			char = _("blank")
+		ui.message(_("selection start: ") + char)
+
 	@script(description=_("Select to previous line"))
 	def script_select_previous_line(self, gesture):
 		if not self.currentNoteLines:
@@ -561,6 +594,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+SHIFT+A": "read_note",
 		"kb:NVDA+ALT+A": "copy_note",
 		"kb:NVDA+ALT+;": "copy_line",
+		"kb:NVDA+ALT+F9": "set_selection_start",
 		"kb:NVDA+ALT+SHIFT+I": "select_previous_line",
 		"kb:NVDA+ALT+SHIFT+K": "select_next_line",
 		"kb:NVDA+ALT+SHIFT+J": "select_previous_word",
