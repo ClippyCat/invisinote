@@ -442,5 +442,5 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+;": "copy_line",
 		"kb:NVDA+ALT+F9": "set_selection_start",
 		"kb:NVDA+ALT+F10": "set_selection_end",
-		"kb:NVDA+BACKSPACE": "clear_markers",
+		"kb:NVDA+ALT+BACKSPACE": "clear_markers",
 	}

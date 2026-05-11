@@ -212,12 +212,12 @@ def script_clear_markers(self, gesture):
     ui.message(_("selection cleared"))
 ```
 
-- [ ] **Step 2: Bind NVDA+BACKSPACE**
+- [ ] **Step 2: Bind NVDA+ALT+BACKSPACE**
 
 Add to `__gestures`:
 
 ```python
-"kb:NVDA+BACKSPACE": "clear_markers",
+"kb:NVDA+ALT+BACKSPACE": "clear_markers",
 ```
 
 - [ ] **Step 3: Lint**
@@ -229,7 +229,7 @@ Expected: no errors.
 
 ```bash
 git add addon/globalPlugins/invisinote/__init__.py
-git commit -m "feat: add clear selection markers gesture (NVDA+BACKSPACE)"
+git commit -m "feat: add clear selection markers gesture (NVDA+ALT+BACKSPACE)"
 ```
 
 ---
@@ -480,12 +480,12 @@ Expected: announces `selection copied`. Open Notepad or any text field, press Ct
 
 - [ ] **Step 6: Test clear-markers**
 
-Press `NVDA+BACKSPACE`.
+Press `NVDA+ALT+BACKSPACE`.
 Expected: announces `selection cleared`. Pressing `NVDA+ALT+F10` twice afterward announces `no selection` (clipboard untouched).
 
 - [ ] **Step 7: Test "no selection" when only one marker is set**
 
-Clear markers (`NVDA+BACKSPACE`). Press `NVDA+ALT+F9` (start only). Press `NVDA+ALT+F10` twice quickly.
+Clear markers (`NVDA+ALT+BACKSPACE`). Press `NVDA+ALT+F9` (start only). Press `NVDA+ALT+F10` twice quickly.
 Expected: the first F10 press sets end and announces; the second triggers copy. Since both markers are now set, this actually copies. To test "no selection," do: clear markers, then press `NVDA+ALT+F10` twice quickly *without* ever pressing F9. The first press sets end; the second tries to copy with no start → announces `no selection`.
 
 - [ ] **Step 8: Test auto-clear on note switch**

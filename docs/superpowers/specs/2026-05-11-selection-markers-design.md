@@ -21,7 +21,7 @@ This design replaces the live-select model with two explicit markers, modeled on
 | NVDA+ALT+F9 | Set selection start at cursor |
 | NVDA+ALT+F10 (single press) | Set selection end at cursor |
 | NVDA+ALT+F10 (double press) | Copy from start to end |
-| NVDA+BACKSPACE | Clear both markers |
+| NVDA+ALT+BACKSPACE | Clear both markers |
 
 NVDA+ALT+F9 has no double-press behavior — pressing twice just re-sets the start marker at the cursor's current position both times.
 
@@ -117,7 +117,7 @@ Gesture bindings added to `__gestures`:
 ```python
 "kb:NVDA+ALT+F9": "set_selection_start",
 "kb:NVDA+ALT+F10": "set_selection_end",
-"kb:NVDA+BACKSPACE": "clear_markers",
+"kb:NVDA+ALT+BACKSPACE": "clear_markers",
 ```
 
 Import added at top of file: `import scriptHandler`.
@@ -154,7 +154,7 @@ No automated test framework exists in this repo. Manual test plan in NVDA after 
 1. Open a note with multi-character content. Press NVDA+ALT+F9. Confirm `selection start: <char>` is announced for the character at the cursor.
 2. Navigate forward a few characters with NVDA+ALT+`.`. Press NVDA+ALT+F10. Confirm `selection end: <char>`.
 3. Press NVDA+ALT+F10 again quickly (double-press). Confirm `selection copied` is announced and the clipboard contains the inclusive range — both the start and end characters are present.
-4. Press NVDA+BACKSPACE. Confirm `selection cleared`.
+4. Press NVDA+ALT+BACKSPACE. Confirm `selection cleared`.
 5. With no start set, press NVDA+ALT+F10 twice quickly. Confirm `no selection`; clipboard unchanged.
 6. Set both markers, then press NVDA+ALT+O to switch notes. Press NVDA+ALT+F10 twice. Confirm `no selection` — markers auto-cleared.
 7. Set start at line 5, navigate to line 3, set end. Double-press F10. Confirm copy auto-normalizes to line 3 → line 5 content.
