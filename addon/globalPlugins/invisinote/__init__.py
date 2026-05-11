@@ -415,13 +415,16 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.currentCharIndex = len(self._current_line())
 		else:
 			if self.currentLineIndex >= len(self.currentNoteLines) - 1:
+				ui.message(self._current_line() or _("blank"))
 				return
 			self._set_current_line(self.currentLineIndex + 1)
-			self.currentCharIndex = len(self._current_line())
+			if self.currentLineIndex > self.selectionAnchor[0]:
+				self.currentCharIndex = len(self._current_line())
 		if not first_press and self.currentLineIndex == old_line and self.currentCharIndex == old_char:
 			return
-		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
-		delta = self._current_line()
+		extending = self._selection_extending(old_line, old_char)
+		suffix = _("selected") if extending else _("unselected")
+		delta = self._current_line() if extending else self.currentNoteLines[old_line].rstrip("\n")
 		ui.message((delta or _("blank")) + " " + suffix)
 
 	@script(description=_("Select to previous line"))
@@ -437,12 +440,16 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.currentCharIndex = 0
 		else:
 			if self.currentLineIndex <= 0:
+				ui.message(self._current_line() or _("blank"))
 				return
 			self._set_current_line(self.currentLineIndex - 1)
+			if self.currentLineIndex >= self.selectionAnchor[0]:
+				self.currentCharIndex = len(self._current_line())
 		if not first_press and self.currentLineIndex == old_line and self.currentCharIndex == old_char:
 			return
-		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
-		delta = self._current_line()
+		extending = self._selection_extending(old_line, old_char)
+		suffix = _("selected") if extending else _("unselected")
+		delta = self._current_line() if extending else self.currentNoteLines[old_line].rstrip("\n")
 		ui.message((delta or _("blank")) + " " + suffix)
 
 	@script(description=_("Select to next word"))
@@ -461,6 +468,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			# already at last word — advance to its end so it can be included in the selection
 			self.currentCharIndex = words[-1][2]
 		if self.currentCharIndex == old_char:
+			ui.message(words[-1][0])
 			return
 		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
 		line = self._current_line()
@@ -480,6 +488,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.currentWordIndex = prev_idx
 		self.currentCharIndex = words[self.currentWordIndex][1]
 		if self.currentCharIndex == old_char:
+			ui.message(words[0][0])
 			return
 		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
 		line = self._current_line()
@@ -496,6 +505,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.currentCharIndex < len(line):
 			self.currentCharIndex += 1
 		if self.currentCharIndex == old_char:
+			if line:
+				ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), line[-1]))
 			return
 		self._update_word_index_from_char()
 		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
@@ -511,6 +522,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if self.currentCharIndex > 0:
 			self.currentCharIndex -= 1
 		if self.currentCharIndex == old_char:
+			if line:
+				ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), line[0]))
 			return
 		self._update_word_index_from_char()
 		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
