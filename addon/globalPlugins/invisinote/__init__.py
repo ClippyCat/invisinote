@@ -271,7 +271,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			folder = os.path.basename(self.notesPath.rstrip("/\\")) or self.notesPath
 			ui.message(folder + " " + self._load_notes())
 		else:
-			ui.message(_("No previous folder"))
+			folder = os.path.basename(self.notesPath.rstrip("/\\")) or self.notesPath
+			ui.message(_("No previous folder, {}").format(folder))
 
 	@script(description=_("Move to next folder"))
 	def script_next_folder(self, gesture):
@@ -281,7 +282,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			folder = os.path.basename(self.notesPath.rstrip("/\\")) or self.notesPath
 			ui.message(folder + " " + self._load_notes())
 		else:
-			ui.message(_("No next folder"))
+			folder = os.path.basename(self.notesPath.rstrip("/\\")) or self.notesPath
+			ui.message(_("No next folder, {}").format(folder))
 
 	@script(description=_("Read current note"))
 	def script_read_note(self, gesture):
