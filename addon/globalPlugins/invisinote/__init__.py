@@ -225,40 +225,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			return None
 		return "".join(self.currentNoteLines).strip() or None
 
-	def _start_selection_if_needed(self):
-		if self.selectionAnchor is None:
-			self.selectionAnchor = (self.currentLineIndex, self.currentCharIndex)
-
-	def _get_selected_text(self):
-		if self.selectionAnchor is None:
-			return None
-		anchorLine, anchorChar = self.selectionAnchor
-		curLine, curChar = self.currentLineIndex, self.currentCharIndex
-		if (anchorLine, anchorChar) <= (curLine, curChar):
-			startLine, startChar = anchorLine, anchorChar
-			endLine, endChar = curLine, curChar
-		else:
-			startLine, startChar = curLine, curChar
-			endLine, endChar = anchorLine, anchorChar
-		if startLine == endLine:
-			return self.currentNoteLines[startLine].rstrip("\n")[startChar:endChar]
-		parts = [self.currentNoteLines[startLine][startChar:]]
-		for i in range(startLine + 1, endLine):
-			parts.append(self.currentNoteLines[i])
-		parts.append(self.currentNoteLines[endLine].rstrip("\n")[:endChar])
-		return "".join(parts)
-
-	def _abs_offset(self, line_idx, char_idx):
-		return sum(len(self.currentNoteLines[i]) for i in range(line_idx)) + char_idx
-
-	def _selection_extending(self, old_line, old_char):
-		aL, aC = self.selectionAnchor
-		nL, nC = self.currentLineIndex, self.currentCharIndex
-		anchor_off = self._abs_offset(aL, aC)
-		old_off = self._abs_offset(old_line, old_char)
-		new_off = self._abs_offset(nL, nC)
-		return abs(new_off - anchor_off) >= abs(old_off - anchor_off)
-
 	def _selection_text(self):
 		if self.selectionStart is None or self.selectionEnd is None:
 			return None
@@ -426,31 +392,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentCharIndex = words[self.currentWordIndex][1]
 		ui.message(words[self.currentWordIndex][0])
 
-	@script(description=_("Select to next line"))
-	def script_select_next_line(self, gesture):
-		if not self.currentNoteLines:
-			return
-		old_line = self.currentLineIndex
-		old_char = self.currentCharIndex
-		first_press = self.selectionAnchor is None
-		if first_press:
-			# anchor at start of current line, extend to its end — selects only this line
-			self.selectionAnchor = (self.currentLineIndex, 0)
-			self.currentCharIndex = len(self._current_line())
-		else:
-			if self.currentLineIndex >= len(self.currentNoteLines) - 1:
-				ui.message(self._current_line() or _("blank"))
-				return
-			self._set_current_line(self.currentLineIndex + 1)
-			if self.currentLineIndex > self.selectionAnchor[0]:
-				self.currentCharIndex = len(self._current_line())
-		if not first_press and self.currentLineIndex == old_line and self.currentCharIndex == old_char:
-			return
-		extending = self._selection_extending(old_line, old_char)
-		suffix = _("selected") if extending else _("unselected")
-		delta = self._current_line() if extending else self.currentNoteLines[old_line].rstrip("\n")
-		ui.message((delta or _("blank")) + " " + suffix)
-
 	@script(description=_("Set selection start"))
 	def script_set_selection_start(self, gesture):
 		if not self.currentNoteLines:
@@ -491,123 +432,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.selectionEnd = None
 		ui.message(_("selection cleared"))
 
-	@script(description=_("Select to previous line"))
-	def script_select_previous_line(self, gesture):
-		if not self.currentNoteLines:
-			return
-		old_line = self.currentLineIndex
-		old_char = self.currentCharIndex
-		first_press = self.selectionAnchor is None
-		if first_press:
-			# anchor at end of current line, extend to its start — selects only this line
-			self.selectionAnchor = (self.currentLineIndex, len(self._current_line()))
-			self.currentCharIndex = 0
-		else:
-			if self.currentLineIndex <= 0:
-				ui.message(self._current_line() or _("blank"))
-				return
-			self._set_current_line(self.currentLineIndex - 1)
-			if self.currentLineIndex >= self.selectionAnchor[0]:
-				self.currentCharIndex = len(self._current_line())
-		if not first_press and self.currentLineIndex == old_line and self.currentCharIndex == old_char:
-			return
-		extending = self._selection_extending(old_line, old_char)
-		suffix = _("selected") if extending else _("unselected")
-		delta = self._current_line() if extending else self.currentNoteLines[old_line].rstrip("\n")
-		ui.message((delta or _("blank")) + " " + suffix)
-
-	@script(description=_("Select to next word"))
-	def script_select_next_word(self, gesture):
-		old_line = self.currentLineIndex
-		old_char = self.currentCharIndex
-		self._start_selection_if_needed()
-		words = self._words_with_indices(self._current_line())
-		if not words:
-			return
-		next_idx = next((i for i, (_, start, _) in enumerate(words) if start > self.currentCharIndex), None)
-		if next_idx is not None:
-			self.currentWordIndex = next_idx
-			self.currentCharIndex = words[self.currentWordIndex][1]
-		else:
-			# already at last word — advance to its end so it can be included in the selection
-			self.currentCharIndex = words[-1][2]
-		if self.currentCharIndex == old_char:
-			ui.message(words[-1][0])
-			return
-		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
-		line = self._current_line()
-		delta = line[min(old_char, self.currentCharIndex):max(old_char, self.currentCharIndex)].strip()
-		ui.message((delta or _("blank")) + " " + suffix)
-
-	@script(description=_("Select to previous word"))
-	def script_select_previous_word(self, gesture):
-		old_line = self.currentLineIndex
-		old_char = self.currentCharIndex
-		self._start_selection_if_needed()
-		words = self._words_with_indices(self._current_line())
-		if not words:
-			return
-		prev_idx = next((i for i in range(len(words) - 1, -1, -1) if words[i][1] < self.currentCharIndex), None)
-		if prev_idx is not None:
-			self.currentWordIndex = prev_idx
-		self.currentCharIndex = words[self.currentWordIndex][1]
-		if self.currentCharIndex == old_char:
-			ui.message(words[0][0])
-			return
-		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
-		line = self._current_line()
-		delta = line[min(old_char, self.currentCharIndex):max(old_char, self.currentCharIndex)].strip()
-		ui.message((delta or _("blank")) + " " + suffix)
-
-	@script(description=_("Select to next character"))
-	def script_select_next_character(self, gesture):
-		old_line = self.currentLineIndex
-		old_char = self.currentCharIndex
-		self._start_selection_if_needed()
-		line = self._current_line()
-		# allow charIndex to reach len(line) so the last char is selectable
-		if self.currentCharIndex < len(line):
-			self.currentCharIndex += 1
-		if self.currentCharIndex == old_char:
-			if line:
-				ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), line[-1]))
-			return
-		self._update_word_index_from_char()
-		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
-		delta_char = line[min(old_char, self.currentCharIndex - 1)]
-		ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), delta_char) + " " + suffix)
-
-	@script(description=_("Select to previous character"))
-	def script_select_previous_character(self, gesture):
-		old_line = self.currentLineIndex
-		old_char = self.currentCharIndex
-		self._start_selection_if_needed()
-		line = self._current_line()
-		if self.currentCharIndex > 0:
-			self.currentCharIndex -= 1
-		if self.currentCharIndex == old_char:
-			if line:
-				ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), line[0]))
-			return
-		self._update_word_index_from_char()
-		suffix = _("selected") if self._selection_extending(old_line, old_char) else _("unselected")
-		delta_char = line[min(old_char, self.currentCharIndex)]
-		ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), delta_char) + " " + suffix)
-
-	@script(description=_("Copy selection"))
-	def script_copy_selection(self, gesture):
-		text = self._get_selected_text()
-		if text:
-			api.copyToClip(text)
-			ui.message(_("Selection copied"))
-		else:
-			ui.message(_("No selection"))
-
-	@script(description=_("Clear selection"))
-	def script_clear_selection(self, gesture):
-		self.selectionAnchor = None
-		ui.message(_("Selection cleared"))
-
 	__gestures = {
 		"kb:NVDA+ALT+P": "open_path",
 		"kb:NVDA+ALT+SHIFT+P": "edit_paths",
@@ -628,12 +452,4 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+F9": "set_selection_start",
 		"kb:NVDA+ALT+F10": "set_selection_end",
 		"kb:NVDA+BACKSPACE": "clear_markers",
-		"kb:NVDA+ALT+SHIFT+I": "select_previous_line",
-		"kb:NVDA+ALT+SHIFT+K": "select_next_line",
-		"kb:NVDA+ALT+SHIFT+J": "select_previous_word",
-		"kb:NVDA+ALT+SHIFT+L": "select_next_word",
-		"kb:NVDA+ALT+SHIFT+,": "select_previous_character",
-		"kb:NVDA+ALT+SHIFT+.": "select_next_character",
-		"kb:NVDA+ALT+SHIFT+;": "copy_selection",
-		"kb:NVDA+ALT+BACKSPACE": "clear_selection",
 	}
