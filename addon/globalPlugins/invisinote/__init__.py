@@ -460,6 +460,27 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			char = _("blank")
 		ui.message(_("selection start: ") + char)
 
+	@script(description=_("Set selection end, double-press to copy"))
+	def script_set_selection_end(self, gesture):
+		if not self.currentNoteLines:
+			ui.message(_("No notes"))
+			return
+		if scriptHandler.getLastScriptRepeatCount() == 0:
+			self.selectionEnd = (self.currentLineIndex, self.currentCharIndex)
+			line = self._current_line()
+			if line and self.currentCharIndex < len(line):
+				char = characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), line[self.currentCharIndex])
+			else:
+				char = _("blank")
+			ui.message(_("selection end: ") + char)
+		else:
+			text = self._selection_text()
+			if text is None:
+				ui.message(_("no selection"))
+			else:
+				api.copyToClip(text)
+				ui.message(_("selection copied"))
+
 	@script(description=_("Select to previous line"))
 	def script_select_previous_line(self, gesture):
 		if not self.currentNoteLines:
@@ -595,6 +616,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+A": "copy_note",
 		"kb:NVDA+ALT+;": "copy_line",
 		"kb:NVDA+ALT+F9": "set_selection_start",
+		"kb:NVDA+ALT+F10": "set_selection_end",
 		"kb:NVDA+ALT+SHIFT+I": "select_previous_line",
 		"kb:NVDA+ALT+SHIFT+K": "select_next_line",
 		"kb:NVDA+ALT+SHIFT+J": "select_previous_word",
