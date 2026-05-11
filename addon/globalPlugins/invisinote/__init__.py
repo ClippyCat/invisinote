@@ -182,10 +182,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentWordIndex = 0
 		self.currentCharIndex = 0
 		self.selectionAnchor = None
+		self.selectionStart = None
+		self.selectionEnd = None
 		return _("No notes")
 
 	def _load_current_note_lines(self):
 		self.selectionAnchor = None
+		self.selectionStart = None
+		self.selectionEnd = None
 		if self.notes:
 			content = self._read_note_file(self.notes[self.currentNoteIndex])
 			self.currentNoteLines = content.splitlines(keepends=True)
