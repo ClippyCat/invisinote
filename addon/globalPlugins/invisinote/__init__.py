@@ -5,6 +5,7 @@ import api
 import wx
 import gui
 import subprocess
+import globalVars
 import globalPluginHandler
 import characterProcessing
 import languageHandler
@@ -126,14 +127,22 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.paths = []
 		self.currentPathIndex = 0
 		self.notesPath = ""
-		self.pathsFile = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "paths.txt"))
+		nvdaConfigPath = globalVars.appArgs.configPath
+		scratchpadDir = os.path.join(nvdaConfigPath, "scratchpad")
+		moduleDir = os.path.dirname(os.path.abspath(__file__))
+		if os.path.normcase(moduleDir).startswith(os.path.normcase(scratchpadDir) + os.sep):
+			self.configFolder = os.path.join(scratchpadDir, "invisinote")
+		else:
+			self.configFolder = os.path.join(nvdaConfigPath, "invisinote")
+		os.makedirs(self.configFolder, exist_ok=True)
+		self.pathsFile = os.path.join(self.configFolder, "paths.txt")
 		self.fileTypes = []
-		self.fileTypesFile = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "filetypes.txt"))
+		self.fileTypesFile = os.path.join(self.configFolder, "filetypes.txt")
 		self._load_paths()
 		self._load_file_types()
 
 	def _load_paths(self):
-		defaultPath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "notes"))
+		defaultPath = os.path.join(self.configFolder, "notes")
 		if not os.path.exists(self.pathsFile):
 			with open(self.pathsFile, "w", encoding="utf-8") as f:
 				f.write(defaultPath + "\n")
@@ -251,9 +260,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def _show_paths_dialog(self):
 		dlg = SettingsDialog(gui.mainFrame, self.paths, self.fileTypes)
 		if dlg.ShowModal() == wx.ID_OK:
-			self.paths = dlg.get_paths() or [
-				os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "notes"))
-			]
+			self.paths = dlg.get_paths() or [os.path.join(self.configFolder, "notes")]
 			self.currentPathIndex = min(self.currentPathIndex, len(self.paths) - 1)
 			self.notesPath = self.paths[self.currentPathIndex]
 			with open(self.pathsFile, "w", encoding="utf-8") as f:
@@ -426,7 +433,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			char = _("blank")
 		ui.message(_("selection start: ") + char)
 
-	@script(description=_("Set selection end, double-press to copy"))
+	@script(description=_("Set selection end, twice to copy"))
 	def script_set_selection_end(self, gesture):
 		if not self.currentNoteLines:
 			ui.message(_("No notes"))

@@ -38,12 +38,14 @@ addon_info = {
 - NVDA+ALT+L: next word
 - NVDA+ALT+,: previous character
 - NVDA+ALT+.: next character
+- NVDA+ALT+H: start of line
+- NVDA+ALT+': end of line
 - NVDA+ALT+SHIFT+A: read note
 - NVDA+ALT+A: copy note
 - NVDA+ALT+;: copy line
-- NVDA+ALT+F9: set_selection_start
-- NVDA+ALT+F10: set_selection_end, twice to copy
-- NVDA+ALT+BACKSPACE: clear_markers
+- NVDA+ALT+F9: set selection start
+- NVDA+ALT+F10: set selection end, twice to copy
+- NVDA+ALT+BACKSPACE: clear markers
 """),
 	# version
 	"addon_version": "1.6",
