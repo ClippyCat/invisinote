@@ -205,7 +205,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		return ""
 
 	def _words_with_indices(self, line):
-		return [(m.group(0), m.start(), m.end()) for m in re.finditer(r'\S+', line)]
+		return [(m.group(0), m.start(), m.end()) for m in re.finditer(r"\S+", line)]
 
 	def _update_word_index_from_char(self):
 		line = self._current_line()
@@ -232,11 +232,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			startLine, startChar = self.selectionEnd
 			endLine, endChar = self.selectionStart
 		if startLine == endLine:
-			return self.currentNoteLines[startLine].rstrip("\n")[startChar:endChar + 1]
+			return self.currentNoteLines[startLine].rstrip("\n")[startChar : endChar + 1]
 		parts = [self.currentNoteLines[startLine][startChar:]]
 		for i in range(startLine + 1, endLine):
 			parts.append(self.currentNoteLines[i])
-		parts.append(self.currentNoteLines[endLine].rstrip("\n")[:endChar + 1])
+		parts.append(self.currentNoteLines[endLine].rstrip("\n")[: endChar + 1])
 		return "".join(parts)
 
 	@script(description=_("Open the path"))
@@ -251,7 +251,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def _show_paths_dialog(self):
 		dlg = SettingsDialog(gui.mainFrame, self.paths, self.fileTypes)
 		if dlg.ShowModal() == wx.ID_OK:
-			self.paths = dlg.get_paths() or [os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "notes"))]
+			self.paths = dlg.get_paths() or [
+				os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "notes"))
+			]
 			self.currentPathIndex = min(self.currentPathIndex, len(self.paths) - 1)
 			self.notesPath = self.paths[self.currentPathIndex]
 			with open(self.pathsFile, "w", encoding="utf-8") as f:
@@ -361,6 +363,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			char = line[self.currentCharIndex]
 			ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), char))
 
+	@script(description=_("Move to start of line"))
+	def script_start_of_line(self, gesture):
+		line = self._current_line()
+		self.currentCharIndex = 0
+		self._update_word_index_from_char()
+		if line:
+			char = line[self.currentCharIndex]
+			ui.message(characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), char))
+
 	@script(description=_("Move to next word"))
 	def script_next_word(self, gesture):
 		words = self._words_with_indices(self._current_line())
@@ -377,7 +388,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		words = self._words_with_indices(self._current_line())
 		if not words:
 			return
-		prev_idx = next((i for i in range(len(words) - 1, -1, -1) if words[i][1] < self.currentCharIndex), None)
+		prev_idx = next(
+			(i for i in range(len(words) - 1, -1, -1) if words[i][1] < self.currentCharIndex), None
+		)
 		if prev_idx is not None:
 			self.currentWordIndex = prev_idx
 		self.currentCharIndex = words[self.currentWordIndex][1]
@@ -391,7 +404,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.selectionStart = (self.currentLineIndex, self.currentCharIndex)
 		line = self._current_line()
 		if line and self.currentCharIndex < len(line):
-			char = characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), line[self.currentCharIndex])
+			char = characterProcessing.processSpeechSymbol(
+				languageHandler.getLanguage(), line[self.currentCharIndex]
+			)
 		else:
 			char = _("blank")
 		ui.message(_("selection start: ") + char)
@@ -405,7 +420,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.selectionEnd = (self.currentLineIndex, self.currentCharIndex)
 			line = self._current_line()
 			if line and self.currentCharIndex < len(line):
-				char = characterProcessing.processSpeechSymbol(languageHandler.getLanguage(), line[self.currentCharIndex])
+				char = characterProcessing.processSpeechSymbol(
+					languageHandler.getLanguage(), line[self.currentCharIndex]
+				)
 			else:
 				char = _("blank")
 			ui.message(_("selection end: ") + char)
@@ -437,6 +454,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"kb:NVDA+ALT+L": "next_word",
 		"kb:NVDA+ALT+,": "previous_character",
 		"kb:NVDA+ALT+.": "next_character",
+		"kb:NVDA+ALT+H": "start_of_line",
 		"kb:NVDA+ALT+SHIFT+A": "read_note",
 		"kb:NVDA+ALT+A": "copy_note",
 		"kb:NVDA+ALT+;": "copy_line",
